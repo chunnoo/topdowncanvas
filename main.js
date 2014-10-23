@@ -6,8 +6,11 @@ function init(){
 	
 	mouse = {
 		x: 0,
-		y: 0
+		y: 0,
+		leftButton: false
 	};
+	
+	gameInit();
 	
 	draw();
 }
@@ -16,20 +19,46 @@ function draw(){
 		var rect = canvas.getBoundingClientRect();
 		mouse.x = e.clientX - (canvas.width/2) - rect.left;
 		mouse.y = e.clientY - (canvas.height/2) - rect.top;
+		if (mouse.leftButton){
+			gameLeftClick();
+		}
+	});
+	canvas.addEventListener('touchmove', function(e){
+		evt.preventDefault();
+		mouse.x = evt.targetTouches[0].pageX - canvas.offsetLeft;
+		mouse.y = evt.targetTouches[0].pageY - canvas.offsetTop;
+		if (mouse.leftButton){
+			gameLeftClick();
+		}
+	});
+	canvas.addEventListener('mousedown', function(e){
+		mouse.leftButton = true;
+		gameLeftClick();
+	});
+	canvas.addEventListener('touchdown', function(e){
+		mouse.leftButton = true;
+		gameLeftClick();
+	});
+	canvas.addEventListener('mouseup', function(e){
+		mouse.leftButton = false;
+		gameLeftClick();
+	});
+	canvas.addEventListener('touchup', function(e){
+		mouse.leftButton = false;
+		gameLeftClick();
 	});
 	
 	ctx.clearRect(0, 0, canvas.width, canvas.heigth); //initial clearing of context
 	
 	ctx.save();
-	ctx.translate(canvas.width/2, canvas.height/2); //initial centring transformation
+	ctx.translate(Math.round(canvas.width/2 - player.x), Math.round(canvas.height/2 - player.y)); //initial centring transformation
 	
-	ctx.beginPath();
-	ctx.moveTo(0,0);
-	ctx.lineTo(mouse.x, mouse.y);
-	ctx.stroke();
+	gameDraw();
 	
 	ctx.restore(); //removing centring transformation
-	setTimeout(draw, 1000/60);
+	requestAnimationFrame(draw);
 }
 
 window.addEventListener('load', init);
+
+
