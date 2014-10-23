@@ -24,7 +24,7 @@ function draw(){
 		}
 	});
 	canvas.addEventListener('touchmove', function(e){
-		evt.preventDefault();
+		e.preventDefault();
 		mouse.x = evt.targetTouches[0].pageX - canvas.offsetLeft;
 		mouse.y = evt.targetTouches[0].pageY - canvas.offsetTop;
 		if (mouse.leftButton){
@@ -36,6 +36,7 @@ function draw(){
 		gameLeftClick();
 	});
 	canvas.addEventListener('touchdown', function(e){
+		e.preventDefault();
 		mouse.leftButton = true;
 		gameLeftClick();
 	});
@@ -44,6 +45,7 @@ function draw(){
 		gameLeftClick();
 	});
 	canvas.addEventListener('touchup', function(e){
+		e.preventDefault();
 		mouse.leftButton = false;
 		gameLeftClick();
 	});
