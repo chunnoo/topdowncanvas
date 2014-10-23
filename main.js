@@ -25,8 +25,8 @@ function draw(){
 	});
 	canvas.addEventListener('touchmove', function(e){
 		e.preventDefault();
-		mouse.x = evt.targetTouches[0].pageX - canvas.offsetLeft;
-		mouse.y = evt.targetTouches[0].pageY - canvas.offsetTop;
+		mouse.x = e.targetTouches[0].pageX - (canvas.width/2) - canvas.offsetLeft;
+		mouse.y = e.targetTouches[0].pageY - (canvas.height/2) - canvas.offsetTop;
 		if (mouse.leftButton){
 			gameLeftClick();
 		}
