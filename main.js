@@ -15,56 +15,76 @@ function init(){
 	draw();
 }
 function draw(){
-    //mouse dragging
-    if (mouse.leftButton){
-        gameLeftDrag();
-    }
-    //mouse
-	canvas.addEventListener('mousemove', function(e){
-		var rect = canvas.getBoundingClientRect();
-		mouse.x = e.clientX - (canvas.width/2) - rect.left;
-		mouse.y = e.clientY - (canvas.height/2) - rect.top;
-		if (mouse.leftButton){
-			gameLeftDrag();
-		}
-	});
-	canvas.addEventListener('mousedown', function(e){
-		var rect = canvas.getBoundingClientRect();
-		mouse.x = e.clientX - (canvas.width/2) - rect.left;
-		mouse.y = e.clientY - (canvas.height/2) - rect.top;
-		mouse.leftButton = true;
-		gameLeftDown();
-	});
-    canvas.addEventListener('mouseup', function(e){
-    		var rect = canvas.getBoundingClientRect();
-		mouse.x = e.clientX - (canvas.width/2) - rect.left;
-		mouse.y = e.clientY - (canvas.height/2) - rect.top;
-		mouse.leftButton = false;
-		gameLeftUp();
-	});
-    //touches
-    canvas.addEventListener('touchmove', function(e){
-		e.preventDefault();
-		mouse.x = e.targetTouches[0].pageX - (canvas.width/2) - canvas.offsetLeft;
-		mouse.y = e.targetTouches[0].pageY - (canvas.height/2) - canvas.offsetTop;
-		if (mouse.leftButton){
-			gameLeftDrag();
-		}
-	});
-	canvas.addEventListener('touchstart', function(e){
-		e.preventDefault();
-		mouse.x = e.targetTouches[0].pageX - (canvas.width/2) - canvas.offsetLeft;
-		mouse.y = e.targetTouches[0].pageY - (canvas.height/2) - canvas.offsetTop;
-		mouse.leftButton = true;
-		gameLeftDown();
-	});
-	canvas.addEventListener('touchend', function(e){
-		e.preventDefault();
-		mouse.x = e.targetTouches[0].pageX - (canvas.width/2) - canvas.offsetLeft;
-		mouse.y = e.targetTouches[0].pageY - (canvas.height/2) - canvas.offsetTop;
-		mouse.leftButton = false;
-		gameLeftUp();
-	});
+    //mouse and touches
+    	if (mouse.leftButton){
+    		gameLeftDrag();
+    		canvas.addEventListener('mousemove', function(e){
+			var rect = canvas.getBoundingClientRect();
+			mouse.x = e.clientX - (canvas.width/2) - rect.left;
+			mouse.y = e.clientY - (canvas.height/2) - rect.top;
+			if (mouse.leftButton){
+				gameLeftDrag();
+			}
+		});
+	    	canvas.addEventListener('touchmove', function(e){
+			e.preventDefault();
+			mouse.x = e.targetTouches[0].pageX - (canvas.width/2) - canvas.offsetLeft;
+			mouse.y = e.targetTouches[0].pageY - (canvas.height/2) - canvas.offsetTop;
+			if (mouse.leftButton){
+				gameLeftDrag();
+			}
+		});
+		canvas.addEventListener('mouseup', function(e){
+	    		var rect = canvas.getBoundingClientRect();
+			mouse.x = e.clientX - (canvas.width/2) - rect.left;
+			mouse.y = e.clientY - (canvas.height/2) - rect.top;
+			mouse.leftButton = false;
+			gameLeftUp();
+		});
+		canvas.addEventListener('mouseout', function(e){
+	    		var rect = canvas.getBoundingClientRect();
+			mouse.x = e.clientX - (canvas.width/2) - rect.left;
+			mouse.y = e.clientY - (canvas.height/2) - rect.top;
+			mouse.leftButton = false;
+			gameLeftUp();
+		});
+		canvas.addEventListener('touchend', function(e){
+			e.preventDefault();
+			mouse.x = e.targetTouches[0].pageX - (canvas.width/2) - canvas.offsetLeft;
+			mouse.y = e.targetTouches[0].pageY - (canvas.height/2) - canvas.offsetTop;
+			mouse.leftButton = false;
+			gameLeftUp();
+		});
+		canvas.addEventListener('touchleave', function(e){
+			e.preventDefault();
+			mouse.x = e.targetTouches[0].pageX - (canvas.width/2) - canvas.offsetLeft;
+			mouse.y = e.targetTouches[0].pageY - (canvas.height/2) - canvas.offsetTop;
+			mouse.leftButton = false;
+			gameLeftUp();
+		});
+		canvas.addEventListener('touchcancel', function(e){
+			e.preventDefault();
+			mouse.x = e.targetTouches[0].pageX - (canvas.width/2) - canvas.offsetLeft;
+			mouse.y = e.targetTouches[0].pageY - (canvas.height/2) - canvas.offsetTop;
+			mouse.leftButton = false;
+			gameLeftUp();
+		});
+	}else {
+		canvas.addEventListener('mousedown', function(e){
+			var rect = canvas.getBoundingClientRect();
+			mouse.x = e.clientX - (canvas.width/2) - rect.left;
+			mouse.y = e.clientY - (canvas.height/2) - rect.top;
+			mouse.leftButton = true;
+			gameLeftDown();
+		});
+		canvas.addEventListener('touchstart', function(e){
+			e.preventDefault();
+			mouse.x = e.targetTouches[0].pageX - (canvas.width/2) - canvas.offsetLeft;
+			mouse.y = e.targetTouches[0].pageY - (canvas.height/2) - canvas.offsetTop;
+			mouse.leftButton = true;
+			gameLeftDown();
+		});
+	}
 	
 	ctx.clearRect(0, 0, canvas.width, canvas.heigth); //initial clearing of context
 	
