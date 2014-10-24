@@ -29,10 +29,16 @@ function draw(){
 		}
 	});
 	canvas.addEventListener('mousedown', function(e){
+		var rect = canvas.getBoundingClientRect();
+		mouse.x = e.clientX - (canvas.width/2) - rect.left;
+		mouse.y = e.clientY - (canvas.height/2) - rect.top;
 		mouse.leftButton = true;
 		gameLeftDown();
 	});
     canvas.addEventListener('mouseup', function(e){
+    		var rect = canvas.getBoundingClientRect();
+		mouse.x = e.clientX - (canvas.width/2) - rect.left;
+		mouse.y = e.clientY - (canvas.height/2) - rect.top;
 		mouse.leftButton = false;
 		gameLeftUp();
 	});
@@ -47,11 +53,15 @@ function draw(){
 	});
 	canvas.addEventListener('touchstart', function(e){
 		e.preventDefault();
+		mouse.x = e.targetTouches[0].pageX - (canvas.width/2) - canvas.offsetLeft;
+		mouse.y = e.targetTouches[0].pageY - (canvas.height/2) - canvas.offsetTop;
 		mouse.leftButton = true;
 		gameLeftDown();
 	});
 	canvas.addEventListener('touchend', function(e){
 		e.preventDefault();
+		mouse.x = e.targetTouches[0].pageX - (canvas.width/2) - canvas.offsetLeft;
+		mouse.y = e.targetTouches[0].pageY - (canvas.height/2) - canvas.offsetTop;
 		mouse.leftButton = false;
 		gameLeftUp();
 	});
