@@ -1,4 +1,9 @@
 function init(){
+	fps = [];
+	fps[0] = 60;
+	fps[1] = new Date;
+	fps[2] = new Date;
+
 	canvas = document.getElementById('canvas');
 	canvas.width = 512;
 	canvas.heigth = 512;
@@ -12,49 +17,80 @@ function init(){
 	
 	gameInit();
 	
+	mouseSetup();
+	
 	draw();
 }
+
+function mouseSetup(){
+	//mouse movement
+	canvas.onmousemove = function(e){
+		e.preventDefault();
+		mouseChange(e.clientX, e.clientY);
+	};
+	canvas.ontouchmove = function(e){
+		e.preventDefault();
+		mouseChange(e.targetTouches[0].pageX, e.targetTouches[0].pageY);
+	};
+	//mouse release
+	canvas.onmouseup = function(e){
+		mouseChange(e.clientX, e.clientY);
+		mouse.leftButton = false;
+		gameLeftUp();
+	};
+	canvas.onmouseleave = function(e){
+		mouseChange(e.clientX, e.clientY);
+		mouse.leftButton = false;
+		gameLeftUp();
+	};
+	canvas.ontouchend = function(e){
+		e.preventDefault();
+		mouseChange(e.targetTouches[0].pageX, e.targetTouches[0].pageY);
+		mouse.leftButton = false;
+		gameLeftUp();
+	};
+	canvas.ontouchleave = function(e){
+		e.preventDefault();
+		mouseChange(e.targetTouches[0].pageX, e.targetTouches[0].pageY);
+		mouse.leftButton = false;
+		gameLeftUp();
+	};
+	canvas.ontouchcancel = function(e){
+		e.preventDefault();
+		mouseChange(e.targetTouches[0].pageX, e.targetTouches[0].pageY);
+		mouse.leftButton = false;
+		gameLeftUp();
+	};
+	//mouse press
+	canvas.onmousedown = function(e){
+		mouseChange(e.clientX, e.clientY);
+		mouse.leftButton = true;
+		gameLeftDown();
+	};
+	canvas.onmouseenter = function(e){
+		mouseChange(e.clientX, e.clientY);
+	};
+	canvas.ontouchstart = function(e){
+		e.preventDefault();
+		mouseChange(e.targetTouches[0].pageX, e.targetTouches[0].pageY);
+		mouse.leftButton = true;
+		gameLeftDown();
+	};
+	canvas.ontouchenter = function(e){
+		e.preventDefault();
+		mouseChange(e.targetTouches[0].pageX, e.targetTouches[0].pageY);
+	}
+}
+
 function draw(){
-    //mouse dragging
+	//fps counter
+	fps[0] = 1000 / (fps[2] - fps[1]);
+	fps[1] = fps[2];
+	fps[2] = new Date;
+	
     if (mouse.leftButton){
-        gameLeftDrag();
-    }
-    //mouse
-	canvas.addEventListener('mousemove', function(e){
-		var rect = canvas.getBoundingClientRect();
-		mouse.x = e.clientX - (canvas.width/2) - rect.left;
-		mouse.y = e.clientY - (canvas.height/2) - rect.top;
-		if (mouse.leftButton){
-			gameLeftDrag();
-		}
-	});
-	canvas.addEventListener('mousedown', function(e){
-		mouse.leftButton = true;
-		gameLeftDown();
-	});
-    canvas.addEventListener('mouseup', function(e){
-		mouse.leftButton = false;
-		gameLeftUp();
-	});
-    //touches
-    canvas.addEventListener('touchmove', function(e){
-		e.preventDefault();
-		mouse.x = e.targetTouches[0].pageX - (canvas.width/2) - canvas.offsetLeft;
-		mouse.y = e.targetTouches[0].pageY - (canvas.height/2) - canvas.offsetTop;
-		if (mouse.leftButton){
-			gameLeftDrag();
-		}
-	});
-	canvas.addEventListener('touchstart', function(e){
-		e.preventDefault();
-		mouse.leftButton = true;
-		gameLeftDown();
-	});
-	canvas.addEventListener('touchend', function(e){
-		e.preventDefault();
-		mouse.leftButton = false;
-		gameLeftUp();
-	});
+		gameLeftDrag();
+	}
 	
 	ctx.clearRect(0, 0, canvas.width, canvas.heigth); //initial clearing of context
 	
@@ -65,6 +101,17 @@ function draw(){
 	
 	ctx.restore(); //removing centring transformation
 	requestAnimationFrame(draw);
+	
+	ctx.font = "20px Verdana";
+	ctx.fillText(String(Math.floor(fps[0])), 10 , 20);
+	ctx.beginPath();
+	ctx.arc(10, fps[0], 5, 0, 2*Math.PI);
+	ctx.fill();
+}
+
+function mouseChange(x,y){
+	mouse.x = x - (canvas.width/2);// - canvas.offsetLeft;;
+	mouse.y = y - (canvas.height/2);// - canvas.offsetTop;
 }
 
 window.addEventListener('load', init);
