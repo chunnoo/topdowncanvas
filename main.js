@@ -3,6 +3,7 @@ function init(){
 	fps[0] = 60;
 	fps[1] = new Date;
 	fps[2] = new Date;
+	fps[3] = false;
 
 	canvas = document.getElementById('canvas');
 	canvas.width = 512;
@@ -18,6 +19,7 @@ function init(){
 	gameInit();
 	
 	mouseSetup();
+	keyboardSetup();
 	
 	draw();
 }
@@ -81,12 +83,25 @@ function mouseSetup(){
 		mouseChange(e.targetTouches[0].pageX, e.targetTouches[0].pageY);
 	}
 }
+function keyboardSetup(){
+	window.addEventListener('keypress', function(e){
+		if (e.charCode == 102){
+			if (fps[3]){
+				fps[3] = false;
+			} else{
+				fps[3] = true;
+			}
+		}
+	});
+}
 
 function draw(){
 	//fps counter
-	fps[0] = 1000 / (fps[2] - fps[1]);
-	fps[1] = fps[2];
-	fps[2] = new Date;
+	if (fps[3]){
+		fps[0] = 1000 / (fps[2] - fps[1]);
+		fps[1] = fps[2];
+		fps[2] = new Date;
+	}
 	
     if (mouse.leftButton){
 		gameLeftDrag();
@@ -100,13 +115,16 @@ function draw(){
 	gameDraw();
 	
 	ctx.restore(); //removing centring transformation
-	requestAnimationFrame(draw);
 	
-	ctx.font = "20px Verdana";
-	ctx.fillText(String(Math.floor(fps[0])), 10 , 20);
-	ctx.beginPath();
-	ctx.arc(10, fps[0], 5, 0, 2*Math.PI);
-	ctx.fill();
+	if (fps[3]){
+		ctx.font = "20px Verdana";
+		ctx.fillText(String(Math.floor(fps[0])), 10 , 20);
+		ctx.beginPath();
+		ctx.arc(10, fps[0], 5, 0, 2*Math.PI);
+		ctx.fill();
+	}
+	
+	requestAnimationFrame(draw);
 }
 
 function mouseChange(x,y){
