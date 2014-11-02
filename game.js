@@ -71,7 +71,7 @@ function gameLeftDrag(){
 }
 
 function gameLeftDown(){
-    player.destX = mouse.x + player.x;
+	player.destX = mouse.x + player.x;
 	player.destY = mouse.y + player.y;
 }
 
